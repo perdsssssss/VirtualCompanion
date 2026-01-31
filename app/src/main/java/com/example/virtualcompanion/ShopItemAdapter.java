@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,32 +12,25 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ShopItemAdapter
         extends RecyclerView.Adapter<ShopItemAdapter.ViewHolder> {
 
-    // Shop preview images
+    // Preview images (shop)
     private final int[] shopImages;
 
     // Equip images (on pet)
     private final int[] equipImages;
 
-    // Prices
+    // Prices (unused for now)
     private final String[] prices;
 
-    // Click listener
     private final OnItemClickListener listener;
 
 
-    // ===============================
-    // INTERFACE
-    // ===============================
-
+    // CLICK INTERFACE
     public interface OnItemClickListener {
         void onItemClick(int equipResId);
     }
 
 
-    // ===============================
     // CONSTRUCTOR
-    // ===============================
-
     public ShopItemAdapter(
             int[] shopImages,
             int[] equipImages,
@@ -52,30 +44,6 @@ public class ShopItemAdapter
         this.listener = listener;
     }
 
-
-    // ===============================
-    // VIEW HOLDER
-    // ===============================
-
-    static class ViewHolder extends RecyclerView.ViewHolder {
-
-        ImageView itemImage;
-        TextView itemPrice;
-        LinearLayout priceContainer;
-
-        ViewHolder(View itemView) {
-            super(itemView);
-
-            itemImage = itemView.findViewById(R.id.itemImage);
-            itemPrice = itemView.findViewById(R.id.itemPrice);
-            priceContainer = itemView.findViewById(R.id.priceContainer);
-        }
-    }
-
-
-    // ===============================
-    // CREATE
-    // ===============================
 
     @NonNull
     @Override
@@ -91,50 +59,46 @@ public class ShopItemAdapter
     }
 
 
-    // ===============================
-    // BIND
-    // ===============================
-
     @Override
     public void onBindViewHolder(
             @NonNull ViewHolder holder,
             int position
     ) {
 
-        // Set shop preview image
-        holder.itemImage.setImageResource(shopImages[position]);
+        holder.itemImage.setImageResource(
+                shopImages[position]
+        );
 
-        // Set price
-        String price = prices[position];
-
-        if (price == null || price.isEmpty()) {
-
-            // Hide price (for cancel)
-            holder.priceContainer.setVisibility(View.GONE);
-
-        } else {
-
-            holder.priceContainer.setVisibility(View.VISIBLE);
-            holder.itemPrice.setText(price);
-        }
+        holder.itemPrice.setText(prices[position]);
 
 
-        // Click → equip
         holder.itemView.setOnClickListener(v -> {
 
+            int equipRes = equipImages[position];
+
             if (listener != null) {
-                listener.onItemClick(equipImages[position]);
+                listener.onItemClick(equipRes);
             }
         });
     }
 
 
-    // ===============================
-    // COUNT
-    // ===============================
-
     @Override
     public int getItemCount() {
         return shopImages.length;
+    }
+
+
+    static class ViewHolder extends RecyclerView.ViewHolder {
+
+        ImageView itemImage;
+        TextView itemPrice;
+
+        ViewHolder(View itemView) {
+            super(itemView);
+
+            itemImage = itemView.findViewById(R.id.itemImage);
+            itemPrice = itemView.findViewById(R.id.itemPrice);
+        }
     }
 }

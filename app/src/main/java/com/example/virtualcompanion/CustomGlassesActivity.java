@@ -2,170 +2,288 @@ package com.example.virtualcompanion;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class CustomGlassesActivity extends BaseActivity {
 
+    // Layers
+    private ImageView topLayer, bottomLayer, hatLayer, glassesLayer;
+
+    private TextView equipButton;
+
+    // Selected preview
+    private int selectedPreview = 0;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Load layout
         setContentView(R.layout.activity_custom_glasses);
 
-        // ===============================
-        // ITEMS RECYCLER VIEW
-        // ===============================
 
-        RecyclerView itemsRecyclerView =
+        // ================= LAYERS =================
+
+        topLayer = findViewById(R.id.topLayer);
+        bottomLayer = findViewById(R.id.bottomLayer);
+        hatLayer = findViewById(R.id.hatLayer);
+        glassesLayer = findViewById(R.id.glassesLayer);
+
+        equipButton = findViewById(R.id.equipButton);
+
+
+        // ================= RECYCLER =================
+
+        RecyclerView recyclerView =
                 findViewById(R.id.itemsRecyclerViewGlasses);
 
-        if (itemsRecyclerView != null) {
+        recyclerView.setLayoutManager(
+                new LinearLayoutManager(
+                        this,
+                        LinearLayoutManager.HORIZONTAL,
+                        false
+                )
+        );
 
-            LinearLayoutManager layoutManager =
-                    new LinearLayoutManager(
-                            this,
-                            LinearLayoutManager.HORIZONTAL,
-                            false
-                    );
 
-            itemsRecyclerView.setLayoutManager(layoutManager);
+        // ================= SHOP =================
 
-            // Different items for GLASSES accessories
-            int[] itemImages = {
-                    R.drawable.ic_cancel,
-                    R.drawable.glasses_normal,
-                    R.drawable.glasses_shades,
-                    R.drawable.glasses_maloi,
-                    R.drawable.glasses_heart
-            };
+        int[] shopImages = {
 
-            String[] itemPrices = {
-                    "", "", "", "150",
-                    "150"
-            };
+                R.drawable.ic_cancel,
+                R.drawable.glasses_normal,
+                R.drawable.glasses_shades,
+                R.drawable.glasses_maloi,
+                R.drawable.glasses_heart
+        };
 
-            int[] dummyEquip = new int[itemImages.length];
 
-            ShopItemAdapter adapter =
-                    new ShopItemAdapter(
-                            itemImages,
-                            dummyEquip,
-                            itemPrices,
-                            resId -> {
-                                // Do nothing for now
+        int[] equipImages = {
+
+                0,
+                R.drawable.glasses_normal_1,
+                R.drawable.glasses_shades_1,
+                R.drawable.glasses_maloi_1,
+                R.drawable.glasses_heart_1
+        };
+
+
+        String[] prices = {
+
+                "",
+                "0",
+                "0",
+                "150",
+                "180"
+        };
+
+
+        // ================= ADAPTER =================
+
+        ShopItemAdapter adapter =
+                new ShopItemAdapter(
+
+                        shopImages,
+                        equipImages,
+                        prices,
+
+                        resId -> {
+
+                            // PREVIEW
+                            selectedPreview = resId;
+
+                            if (resId == 0) {
+
+                                glassesLayer.setVisibility(View.GONE);
+
+                            } else {
+
+                                glassesLayer.setImageResource(resId);
+                                glassesLayer.setVisibility(View.VISIBLE);
                             }
-                    );
+
+                            updateEquipText();
+                        }
+                );
+
+        recyclerView.setAdapter(adapter);
 
 
-            itemsRecyclerView.setAdapter(adapter);
+        // ================= EQUIP =================
+
+        equipButton.setOnClickListener(v -> {
+
+            int equipped =
+                    OutfitManager.getGlasses(this);
+
+
+            // UNEQUIP
+            if (selectedPreview == equipped) {
+
+                OutfitManager.setGlasses(this, 0);
+
+                glassesLayer.setVisibility(View.GONE);
+
+                equipButton.setText("Equip");
+
+                return;
+            }
+
+
+            // EQUIP
+            OutfitManager.setGlasses(this, selectedPreview);
+
+            equipButton.setText("Unequip");
+        });
+
+
+        // ================= RESTORE =================
+
+        restoreAll();
+
+
+        // ================= UI =================
+
+        setupCategories();
+        setupSettings();
+        setupBottomNav();
+    }
+
+
+    // ================= RESTORE =================
+
+    private void restoreAll() {
+
+        restoreLayer(topLayer,
+                OutfitManager.getTop(this));
+
+        restoreLayer(bottomLayer,
+                OutfitManager.getBottom(this));
+
+        restoreLayer(hatLayer,
+                OutfitManager.getHat(this));
+
+        restoreLayer(glassesLayer,
+                OutfitManager.getGlasses(this));
+
+
+        selectedPreview =
+                OutfitManager.getGlasses(this);
+
+        updateEquipText();
+    }
+
+
+    private void restoreLayer(ImageView layer, int resId) {
+
+        if (layer == null) return;
+
+        if (resId == 0) {
+
+            layer.setVisibility(View.GONE);
+
+        } else {
+
+            layer.setImageResource(resId);
+            layer.setVisibility(View.VISIBLE);
+        }
+    }
+
+
+    // ================= EQUIP TEXT =================
+
+    private void updateEquipText() {
+
+        int equipped =
+                OutfitManager.getGlasses(this);
+
+        if (selectedPreview == equipped &&
+                equipped != 0) {
+
+            equipButton.setText("Unequip");
+
+        } else {
+
+            equipButton.setText("Equip");
+        }
+    }
+
+
+    // ================= CATEGORIES =================
+
+    private void setupCategories() {
+
+        LinearLayout cat1 = findViewById(R.id.categoryButton1);
+        LinearLayout cat2 = findViewById(R.id.categoryButton2);
+        LinearLayout cat3 = findViewById(R.id.categoryButton3);
+        LinearLayout cat4 = findViewById(R.id.categoryButton4);
+
+
+        if (cat1 != null) {
+            cat1.setOnClickListener(v ->
+                    startActivity(new Intent(
+                            this,
+                            CustomTopActivity.class)));
         }
 
-        // ===============================
-        // CATEGORY BUTTONS
-        // ===============================
-
-        LinearLayout category1 = findViewById(R.id.categoryButton1);
-        LinearLayout category2 = findViewById(R.id.categoryButton2);
-        LinearLayout category3 = findViewById(R.id.categoryButton3);
-        LinearLayout category4 = findViewById(R.id.categoryButton4);
-
-        // TOP
-        if (category1 != null) {
-            category1.setOnClickListener(v -> {
-                startActivity(new Intent(
-                        CustomGlassesActivity.this,
-                        CustomTopActivity.class
-                ));
-                finish();
-            });
+        if (cat2 != null) {
+            cat2.setOnClickListener(v ->
+                    startActivity(new Intent(
+                            this,
+                            CustomBottomActivity.class)));
         }
 
-        // BOTTOM
-        if (category2 != null) {
-            category2.setOnClickListener(v -> {
-                startActivity(new Intent(
-                        CustomGlassesActivity.this,
-                        CustomBottomActivity.class
-                ));
-                finish();
-            });
+        if (cat3 != null) {
+            cat3.setOnClickListener(v ->
+                    startActivity(new Intent(
+                            this,
+                            CustomHatActivity.class)));
         }
+    }
 
-        // HAT
-        if (category3 != null) {
-            category3.setOnClickListener(v -> {
-                startActivity(new Intent(
-                        CustomGlassesActivity.this,
-                        CustomHatActivity.class
-                ));
-                finish();
-            });
+
+    // ================= SETTINGS =================
+
+    private void setupSettings() {
+
+        ImageView settings =
+                findViewById(R.id.settingsIcon);
+
+        if (settings != null) {
+            settings.setOnClickListener(v ->
+                    startActivity(new Intent(
+                            this,
+                            SettingsActivity.class)));
         }
+    }
 
-        // GLASSES (Current)
-        if (category4 != null) {
-            category4.setOnClickListener(v -> {
-                // Stay here
-            });
-        }
 
-        // ===============================
-        // SETTINGS
-        // ===============================
+    // ================= BOTTOM NAV =================
 
-        ImageView settingsIcon = findViewById(R.id.settingsIcon);
-
-        if (settingsIcon != null) {
-            settingsIcon.setOnClickListener(v -> {
-                startActivity(new Intent(
-                        CustomGlassesActivity.this,
-                        SettingsActivity.class
-                ));
-            });
-        }
-
-        // ===============================
-        // BOTTOM NAV
-        // ===============================
+    private void setupBottomNav() {
 
         ImageView navHome = findViewById(R.id.navHome);
         ImageView navQuests = findViewById(R.id.navQuests);
-        ImageView navCustomize = findViewById(R.id.navCustomize);
+
 
         if (navHome != null) {
-            navHome.setOnClickListener(v -> {
-                startActivity(new Intent(
-                        CustomGlassesActivity.this,
-                        MoodResultActivity.class
-                ));
-                finish();
-            });
+            navHome.setOnClickListener(v ->
+                    startActivity(new Intent(
+                            this,
+                            MoodActivity.class)));
         }
 
         if (navQuests != null) {
-            navQuests.setOnClickListener(v -> {
-                startActivity(new Intent(
-                        CustomGlassesActivity.this,
-                        QuestsActivity.class
-                ));
-                finish();
-            });
-        }
-
-        if (navCustomize != null) {
-            navCustomize.setOnClickListener(v -> {
-                startActivity(new Intent(
-                        CustomGlassesActivity.this,
-                        CustomTopActivity.class
-                ));
-                finish();
-            });
+            navQuests.setOnClickListener(v ->
+                    startActivity(new Intent(
+                            this,
+                            QuestsActivity.class)));
         }
     }
 }

@@ -213,35 +213,35 @@
         app:layout_constraintBottom_toTopOf="@id/shopContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.5"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp">
+
 
         <!-- BASE PET -->
         <ImageView
             android:id="@+id/petDisplay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="Your Pet"
             android:scaleType="fitCenter"
-            android:adjustViewBounds="true"
             android:src="@drawable/emotion_neutral" />
 
-        <!-- TOP CLOTHES -->
+
+        <!-- BOTTOM CLOTHES (LOWER) -->
+        <ImageView
+            android:id="@+id/bottomLayer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:visibility="gone" />
+
+
+        <!-- TOP CLOTHES (ABOVE BOTTOM) -->
         <ImageView
             android:id="@+id/topLayer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitCenter"
             android:visibility="gone" />
-
-        <!-- BOTTOM CLOTHES -->
-        <ImageView
-            android:id="@+id/bottomLayer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitCenter"
-            android:visibility="gone"/>
 
 
         <!-- HAT -->
@@ -252,7 +252,8 @@
             android:scaleType="fitCenter"
             android:visibility="gone" />
 
-        <!-- GLASSES -->
+
+        <!-- GLASSES (TOPMOST) -->
         <ImageView
             android:id="@+id/glassesLayer"
             android:layout_width="match_parent"
@@ -261,6 +262,8 @@
             android:visibility="gone" />
 
     </FrameLayout>
+
+
 
 
     <!-- Shop Container - Bottom -->
