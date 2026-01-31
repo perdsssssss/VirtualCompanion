@@ -39,6 +39,42 @@ public class DatabaseManager {
     // ================= USER =================
 
     /**
+     * Get current user/pet name
+     */
+    public String getName() {
+
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        Cursor c = db.rawQuery(
+                "SELECT name FROM user WHERE id=1",
+                null
+        );
+
+        String name = "";
+
+        if (c.moveToFirst()) {
+            name = c.getString(0);
+        }
+
+        c.close();
+
+        return name;
+    }
+
+    /**
+     * Update user/pet name
+     */
+    public void setName(String name) {
+
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        db.execSQL(
+                "UPDATE user SET name=? WHERE id=1",
+                new Object[]{name}
+        );
+    }
+
+    /**
      * Get current coins
      */
     public int getCoins() {
@@ -86,7 +122,7 @@ public class DatabaseManager {
                 null
         );
 
-        String gender = "neutral";
+        String gender = "male";
 
         if (c.moveToFirst()) {
             gender = c.getString(0);

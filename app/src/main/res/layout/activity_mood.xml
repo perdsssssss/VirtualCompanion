@@ -120,7 +120,6 @@
         android:contentDescription="Your Pet"
         android:elevation="6dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/emotion_neutral"
         app:layout_constraintDimensionRatio="H,1:0.9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -173,7 +172,7 @@
             android:layout_marginHorizontal="6dp"
             android:background="@drawable/emoji_selector"
             android:clickable="true"
-            android:contentDescription="Very Sad"
+            android:contentDescription="Neutral"
             android:focusable="true"
             android:src="@drawable/emoji_neutral_b" />
 
@@ -185,7 +184,7 @@
             android:layout_marginHorizontal="6dp"
             android:background="@drawable/emoji_selector"
             android:clickable="true"
-            android:contentDescription="Sad"
+            android:contentDescription="Happy"
             android:focusable="true"
             android:src="@drawable/emoji_happy_b" />
 
@@ -197,7 +196,7 @@
             android:layout_marginHorizontal="6dp"
             android:background="@drawable/emoji_selector"
             android:clickable="true"
-            android:contentDescription="Neutral"
+            android:contentDescription="Sad"
             android:focusable="true"
             android:src="@drawable/emoji_sad_b" />
 
@@ -209,7 +208,7 @@
             android:layout_marginHorizontal="6dp"
             android:background="@drawable/emoji_selector"
             android:clickable="true"
-            android:contentDescription="Happy"
+            android:contentDescription="Angry"
             android:focusable="true"
             android:src="@drawable/emoji_angry_b" />
 
@@ -221,7 +220,7 @@
             android:layout_marginHorizontal="6dp"
             android:background="@drawable/emoji_selector"
             android:clickable="true"
-            android:contentDescription="Very Happy"
+            android:contentDescription="Anxious"
             android:focusable="true"
             android:src="@drawable/emoji_anxious_b" />
 
