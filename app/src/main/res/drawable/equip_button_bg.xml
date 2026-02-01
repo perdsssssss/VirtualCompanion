@@ -12,6 +12,7 @@
             <solid android:color="#40000000"/>
             <corners android:radius="20dp"/>
         </shape>
+
     </item>
 
     <!-- Main Button Background with Gradient -->
