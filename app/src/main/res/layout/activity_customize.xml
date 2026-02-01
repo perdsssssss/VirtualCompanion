@@ -48,7 +48,7 @@
         android:shadowDy="4"
         android:shadowRadius="12"
         android:text="Mirror your Mood"
-        android:textColor="#FF753A"
+        android:textColor="#FFFFFF"
         android:textSize="32sp"
         android:textStyle="bold"
         app:autoSizeMaxTextSize="32sp"
