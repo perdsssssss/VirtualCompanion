@@ -23,8 +23,9 @@ public class OpeningActivity extends BaseActivity {
         DatabaseManager db = DatabaseManager.get(this); // Initialize database
 
         // ================= TESTING ONLY =================
-        // Uncomment the line below to reset today's mood every time you open the app
+        // Uncomment the line below to reset today's mood and quests every time you open the app
         db.deleteMoodForToday();
+        db.resetAllQuestProgressForTesting();
         // ================================================
 
         setContentView(R.layout.activity_opening);

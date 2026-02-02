@@ -8,6 +8,8 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
 public class QuestsActivity extends BaseActivity {
 
     private RecyclerView questsRecyclerView;
@@ -47,8 +49,26 @@ public class QuestsActivity extends BaseActivity {
 
         questsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        String mood = db.getLatestMoodText();
+
+        if ("happy".equals(mood)) {
+            Intent intent = new Intent(this, MoodResultActivity.class);
+            intent.putExtra("flow", "HAPPY_MOOD");
+            startActivity(intent);
+            finish();
+            return;
+        }
+
+        List<Quest> quests = db.getQuestsForMood(db.getLatestMood());
+
+
+        if (quests.isEmpty()) {
+            Toast.makeText(this, "No quests for your mood today!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         questsAdapter = new QuestsAdapter(
-                db.getAllQuests(),
+                quests,
                 this::handleQuestMarkDone
         );
 
@@ -57,7 +77,6 @@ public class QuestsActivity extends BaseActivity {
 
     // ================= QUEST LOGIC =================
     private void handleQuestMarkDone(Quest quest, int position) {
-        DatabaseManager db = DatabaseManager.get(this);
 
         int currentProgress = db.getQuestProgress(quest.getId());
 
@@ -78,6 +97,24 @@ public class QuestsActivity extends BaseActivity {
                     "Quest Completed! +" + quest.getReward() + " coins",
                     Toast.LENGTH_SHORT
             ).show();
+
+            // ============= MOOD SESSION ===============
+
+            String moodText = quest.getMood();
+
+            int completed = db.getCompletedQuestCountForMood(moodText);
+            int total = db.getTotalQuestCountForMood(moodText);
+
+            if (completed == total) {
+
+                Intent intent = new Intent(this, MoodActivity.class);
+                intent.putExtra("flow", "QUEST_COMPLETE");
+
+                startActivity(intent);
+                finish();
+                return;
+            }
+
         }
 
         questsAdapter.notifyItemChanged(position);

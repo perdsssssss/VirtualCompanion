@@ -71,6 +71,29 @@ public class MoodResultActivity extends BaseActivity {
             moodMessage.setText(MOOD_MESSAGES[moodIndex]);
         }
 
+        String flow = getIntent().getStringExtra("flow");
+
+        if ("QUEST_COMPLETE".equals(flow)) {
+
+            if (moodMessage != null) {
+                moodMessage.setText("You completed all your tasks. How do you feel now?");
+            }
+
+            if (resultMoodLabel != null) {
+                resultMoodLabel.setText("Well Done");
+            }
+
+        } else if ("HAPPY_MOOD".equals(flow)) {
+
+            if (moodMessage != null) {
+                moodMessage.setText("You're feeling happy today! No need for you to do some tasks! Have a great day ahead!");
+            }
+
+            if (resultMoodLabel != null) {
+                resultMoodLabel.setText("Happy");
+            }
+        }
+
         // ================= OUTFIT LAYERS =================
         try {
             ImageView topLayer = findViewById(R.id.topLayer);

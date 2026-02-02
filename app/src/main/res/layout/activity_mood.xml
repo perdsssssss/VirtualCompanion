@@ -126,6 +126,28 @@
         app:layout_constraintTop_toBottomOf="@id/appTitle"
         app:layout_constraintWidth_percent="0.9" />
 
+    <!-- Mood Feedback Message (shown after completing quests) -->
+    <TextView
+        android:id="@+id/moodInfoMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-50dp"
+        android:elevation="8dp"
+        android:fontFamily="@font/nunito_bold"
+        android:shadowColor="#CC000000"
+        android:shadowDx="0"
+        android:shadowDy="2"
+        android:shadowRadius="6"
+        android:text="You completed all your tasks. How do you feel now?"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/mainPetImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
     <!-- Mood Prompt - Overlays bottom of pet -->
     <TextView
         android:id="@+id/moodPrompt"

@@ -77,6 +77,9 @@ public class MoodActivity extends BaseActivity {
         ImageView emoji4 = findViewById(R.id.emoji4);
         ImageView emoji5 = findViewById(R.id.emoji5);
 
+        android.widget.TextView moodPrompt = findViewById(R.id.moodPrompt);
+        android.widget.TextView moodInfoMessage = findViewById(R.id.moodInfoMessage);
+
         // Bottom Navigation
         ImageView navHome = findViewById(R.id.navHome);
         ImageView navQuests = findViewById(R.id.navQuests);
@@ -93,6 +96,19 @@ public class MoodActivity extends BaseActivity {
         setupEmojiListeners(emoji3, 2);
         setupEmojiListeners(emoji4, 3);
         setupEmojiListeners(emoji5, 4);
+
+        // Mood message prompt
+        String flow = getIntent().getStringExtra("flow");
+
+        if ("QUEST_COMPLETE".equals(flow)) {
+
+            if (moodInfoMessage != null) {
+                moodInfoMessage.setVisibility(android.view.View.VISIBLE);
+            }
+            if (moodPrompt != null) {
+                moodPrompt.setVisibility(android.view.View.GONE);
+            }
+        }
 
         // Submit → Mood Result
         submitButton.setOnClickListener(v -> {

@@ -105,16 +105,6 @@ public class DatabaseManager {
 
         if (c.moveToFirst()) {
             coins = c.getInt(0);
-        } else {
-            // No user found, create default user
-            c.close();
-            SQLiteDatabase writeDb = helper.getWritableDatabase();
-            writeDb.execSQL(
-                    "INSERT INTO user (name, coins, pet_gender) " +
-                            "VALUES ('Iggy',150,'male');"
-            );
-            coins = 150;
-            return coins;
         }
 
         c.close();
@@ -190,12 +180,12 @@ public class DatabaseManager {
      * Check if mood was already selected today
      */
     public boolean hasSelectedMoodToday() {
+
         SQLiteDatabase db = helper.getReadableDatabase();
-        String today = getTodayDate();
 
         Cursor c = db.rawQuery(
                 "SELECT id FROM mood WHERE date = ?",
-                new String[]{today}
+                new String[]{getTodayDate()}
         );
 
         boolean exists = c.getCount() > 0;
@@ -207,8 +197,26 @@ public class DatabaseManager {
      * [TESTING ONLY] Delete today's mood selection
      */
     public void deleteMoodForToday() {
+
         SQLiteDatabase db = helper.getWritableDatabase();
-        db.execSQL("DELETE FROM mood WHERE date = ?", new Object[]{getTodayDate()});
+
+        db.execSQL(
+                "DELETE FROM mood WHERE date = ?",
+                new Object[]{getTodayDate()}
+        );
+    }
+
+    /**
+     * [TESTING ONLY]
+     * Reset all quest progress
+     */
+    public void resetAllQuestProgressForTesting() {
+
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        db.execSQL(
+                "UPDATE quest SET progress = 0, rewarded = 0"
+        );
     }
 
     /**
@@ -219,10 +227,9 @@ public class DatabaseManager {
         SQLiteDatabase db = helper.getReadableDatabase();
 
         // Try to get today's mood first
-        String today = getTodayDate();
         Cursor c = db.rawQuery(
                 "SELECT value FROM mood WHERE date = ? ORDER BY id DESC LIMIT 1",
-                new String[]{today}
+                new String[]{getTodayDate()}
         );
 
         if (!c.moveToFirst()) {
@@ -244,12 +251,41 @@ public class DatabaseManager {
         return Math.max(0, Math.min(moodIndex, 4));
     }
 
+    /**
+     * Get latest saved mood as text
+     */
+    public String getLatestMoodText() {
+        return moodIndexToText(getLatestMood());
+    }
+
+    /**
+     * Convert mood index (0–4) to mood text
+     */
+    private String moodIndexToText(int moodIndex) {
+        switch (moodIndex) {
+            case 0: return "neutral";
+            case 1: return "happy";
+            case 2: return "sad";
+            case 3: return "angry";
+            case 4: return "anxious";
+            default: return "neutral";
+        }
+    }
 
     // ================= QUEST =================
+
+    /**
+     * Get all quests
+     */
     public List<Quest> getAllQuests() {
+
         List<Quest> questList = new ArrayList<>();
         SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT id, title, description, reward, progress, rewarded FROM quest", null);
+
+        Cursor c = db.rawQuery(
+                "SELECT id, title, description, reward, progress, rewarded, mood FROM quest",
+                null
+        );
 
         if (c.moveToFirst()) {
             do {
@@ -259,42 +295,154 @@ public class DatabaseManager {
                 int reward = c.getInt(3);
                 int progress = c.getInt(4);
                 boolean rewarded = c.getInt(5) == 1;
+                String mood = c.getString(6);
 
-                Quest quest = new Quest(id, title, desc, reward);
+                Quest quest = new Quest(id, title, desc, reward, mood);
                 quest.setProgress(progress);
                 quest.setRewarded(rewarded);
                 questList.add(quest);
+
             } while (c.moveToNext());
         }
+
         c.close();
         return questList;
     }
 
-    public int getQuestProgress(int questId) {
+    /**
+     * Get quests filtered by mood
+     */
+    public List<Quest> getQuestsForMood(int selectedMood) {
+
+        String moodText = moodIndexToText(selectedMood);
+
+        List<Quest> quests = new ArrayList<>();
         SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT progress FROM quest WHERE id=?", new String[]{String.valueOf(questId)});
+
+        Cursor c = db.rawQuery(
+                "SELECT id, title, description, reward, progress, rewarded, mood FROM quest WHERE mood=?",
+                new String[]{moodText}
+        );
+
+        if (c.moveToFirst()) {
+            do {
+                int id = c.getInt(0);
+                String title = c.getString(1);
+                String desc = c.getString(2);
+                int reward = c.getInt(3);
+                int progress = c.getInt(4);
+                boolean rewarded = c.getInt(5) == 1;
+                String mood = c.getString(6);
+
+                Quest q = new Quest(id, title, desc, reward, mood);
+                q.setProgress(progress);
+                q.setRewarded(rewarded);
+                quests.add(q);
+
+            } while (c.moveToNext());
+        }
+
+        c.close();
+        return quests;
+    }
+
+
+    /**
+     * Get quest progress
+     */
+    public int getQuestProgress(int questId) {
+
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        Cursor c = db.rawQuery(
+                "SELECT progress FROM quest WHERE id=?",
+                new String[]{String.valueOf(questId)}
+        );
+
         int progress = 0;
-        if (c.moveToFirst()) progress = c.getInt(0);
+
+        if (c.moveToFirst()) {
+            progress = c.getInt(0);
+        }
+
         c.close();
         return progress;
     }
 
+    /**
+     * Update quest progress
+     */
     public void updateQuestProgress(int questId, int progress) {
+
         SQLiteDatabase db = helper.getWritableDatabase();
-        db.execSQL("UPDATE quest SET progress=? WHERE id=?", new Object[]{progress, questId});
+
+        db.execSQL(
+                "UPDATE quest SET progress=? WHERE id=?",
+                new Object[]{progress, questId}
+        );
     }
 
+    /**
+     * Check if quest is rewarded
+     */
     public boolean isQuestRewarded(int questId) {
+
         SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT rewarded FROM quest WHERE id=?", new String[]{String.valueOf(questId)});
+
+        Cursor c = db.rawQuery(
+                "SELECT rewarded FROM quest WHERE id=?",
+                new String[]{String.valueOf(questId)}
+        );
+
         boolean rewarded = false;
-        if (c.moveToFirst()) rewarded = c.getInt(0) == 1;
+
+        if (c.moveToFirst()) {
+            rewarded = c.getInt(0) == 1;
+        }
+
         c.close();
         return rewarded;
     }
 
+    /**
+     * Mark quest as rewarded
+     */
     public void markQuestRewarded(int questId) {
+
         SQLiteDatabase db = helper.getWritableDatabase();
-        db.execSQL("UPDATE quest SET rewarded=1 WHERE id=?", new Object[]{questId});
+
+        db.execSQL(
+                "UPDATE quest SET rewarded=1 WHERE id=?",
+                new Object[]{questId}
+        );
     }
+
+    public int getCompletedQuestCountForMood(String mood) {
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        Cursor c = db.rawQuery(
+                "SELECT COUNT(*) FROM quest WHERE mood=? AND progress>=100",
+                new String[]{mood}
+        );
+
+        int count = 0;
+        if (c.moveToFirst()) count = c.getInt(0);
+        c.close();
+        return count;
+    }
+
+    public int getTotalQuestCountForMood(String mood) {
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        Cursor c = db.rawQuery(
+                "SELECT COUNT(*) FROM quest WHERE mood=?",
+                new String[]{mood}
+        );
+
+        int count = 0;
+        if (c.moveToFirst()) count = c.getInt(0);
+        c.close();
+        return count;
+    }
+
 }
