@@ -20,13 +20,6 @@ public class InventoryManager {
     }
 
     /**
-     * Reset all owned items (for testing)
-     */
-    public static void resetAll(Context context) {
-        getPrefs(context).edit().clear().apply();
-    }
-
-    /**
      * Check if user owns an item
      */
     public static boolean isOwned(Context c, int resId) {
