@@ -11,6 +11,7 @@ public class MainApplication extends Application {
 
     private int activityReferences = 0;
     private boolean isActivityChangingConfigurations = false;
+    private Activity currentActivity; // Track current activity
 
     @Override
     public void onCreate() {
@@ -26,13 +27,16 @@ public class MainApplication extends Application {
             public void onActivityStarted(@NonNull Activity activity) {
                 if (++activityReferences == 1 && !isActivityChangingConfigurations) {
                     // App enters foreground
-                    android.util.Log.d("MusicManager", "App in foreground - Starting music");
-                    MusicManager.startMusic(MainApplication.this);
+                    android.util.Log.d("MusicManager", "App in foreground - Resuming music");
+
+                    // Resume from where we left off
+                    MusicManager.resumeCurrentTrack(MainApplication.this);
                 }
             }
 
             @Override
             public void onActivityResumed(@NonNull Activity activity) {
+                currentActivity = activity;
             }
 
             @Override
@@ -44,8 +48,10 @@ public class MainApplication extends Application {
                 isActivityChangingConfigurations = activity.isChangingConfigurations();
                 if (--activityReferences == 0 && !isActivityChangingConfigurations) {
                     // App enters background (user pressed home or switched apps)
-                    android.util.Log.d("MusicManager", "App in background - Stopping music");
-                    MusicManager.stopMusic();
+                    android.util.Log.d("MusicManager", "App in background - Pausing music");
+
+                    // Just pause, don't stop - this preserves the track and position
+                    MusicManager.pauseMusic();
                 }
             }
 
@@ -55,6 +61,9 @@ public class MainApplication extends Application {
 
             @Override
             public void onActivityDestroyed(@NonNull Activity activity) {
+                if (currentActivity == activity) {
+                    currentActivity = null;
+                }
             }
         });
     }
@@ -62,9 +71,9 @@ public class MainApplication extends Application {
     @Override
     public void onTerminate() {
         super.onTerminate();
-        // Stop music when app is terminated
-        android.util.Log.d("MusicManager", "App terminated - Stopping music");
-        MusicManager.stopMusic();
+        // Fully reset music when app is terminated
+        android.util.Log.d("MusicManager", "App terminated - Resetting music");
+        MusicManager.resetMusic();
     }
 
     @Override
@@ -77,9 +86,11 @@ public class MainApplication extends Application {
     @Override
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
-        // Stop music if system needs memory
-        if (level >= TRIM_MEMORY_MODERATE) {
+        // Only stop if system is critically low on memory
+        if (level >= TRIM_MEMORY_COMPLETE) {
             MusicManager.stopMusic();
+        } else if (level >= TRIM_MEMORY_MODERATE) {
+            MusicManager.pauseMusic();
         }
     }
 }

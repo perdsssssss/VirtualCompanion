@@ -399,6 +399,33 @@ public class QuestSessionActivity extends BaseActivity {
                 .setMessage("Did you complete this quest successfully?")
                 .setPositiveButton("Yes, I did it!", (dialog, which) -> {
                     markQuestAsCompleted();
+
+                    // ========== CHECK IF ALL QUESTS ARE COMPLETE ==========
+                    DatabaseManager db = DatabaseManager.get(this);
+                    if (db.areAllCurrentQuestsComplete()) {
+                        android.util.Log.d(TAG, "ALL QUESTS COMPLETE! Redirecting to MoodActivity.");
+
+                        // Mark that first quest set was completed today
+                        db.markFirstQuestCompleted();
+
+                        // Clear the quest session
+                        db.clearCurrentQuestSession();
+
+                        // Restore music
+                        MusicManager.restorePreQuestMusic(this);
+
+                        // DIRECTLY GO TO MOOD ACTIVITY
+                        Intent intent = new Intent(this, MoodActivity.class);
+                        intent.putExtra("flow", "QUEST_COMPLETE");
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        finish();
+                    } else {
+                        // Not all quests done, just go back normally
+                        android.util.Log.d(TAG, "Quest complete, but more quests remaining.");
+                        finish();
+                    }
                 })
                 .setNegativeButton("Not yet", (dialog, which) -> {
                     Toast.makeText(this, "Keep going! You can do it!", Toast.LENGTH_SHORT).show();
@@ -428,11 +455,12 @@ public class QuestSessionActivity extends BaseActivity {
         resultIntent.putExtra("quest_position", questPosition);
         setResult(RESULT_QUEST_COMPLETED, resultIntent);
 
-        // Restore the music that was playing before the quest
-        Log.d(TAG, "Quest completed, restoring previous music");
-        MusicManager.restorePreQuestMusic(this);
-
-        finish();
+        // Restore the music that was playing before the quest (only if not all complete)
+        // If all complete, music will be restored in showCompletionDialog()
+        if (!db.areAllCurrentQuestsComplete()) {
+            Log.d(TAG, "Quest completed, restoring previous music");
+            MusicManager.restorePreQuestMusic(this);
+        }
     }
 
     @Override
@@ -444,7 +472,11 @@ public class QuestSessionActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Don't resume music here - let MusicManager handle it
+        // Don't call super.onResume() to avoid BaseActivity resuming background music
+        // Quest music should continue playing
+
+        // Just apply title
+        applyPetNameToTitle();
     }
 
     @Override
@@ -461,14 +493,24 @@ public class QuestSessionActivity extends BaseActivity {
         // Stop all animations
         stopAllAlerts();
 
-        // Restore previous music when leaving quest (if not already done)
-        Log.d(TAG, "Activity destroyed, restoring previous music");
-        MusicManager.restorePreQuestMusic(this);
+        // Only restore if quest was not completed (user pressed back)
+        DatabaseManager db = DatabaseManager.get(this);
+        if (!db.areAllCurrentQuestsComplete()) {
+            Log.d(TAG, "Activity destroyed without completing all quests, restoring previous music");
+            MusicManager.restorePreQuestMusic(this);
+        }
     }
 
-    @Override
-    public void onBackPressed() {
-        // Show confirmation dialog instead of immediately going back
-        backButton.performClick();
-    }
-}
+    private void applyPetNameToTitle() {
+        TextView title = findViewById(R.id.appTitle);
+        if (title == null) return;
+
+        DatabaseManager db = DatabaseManager.get(this);
+        String name = db.getName();
+
+        if (name != null && !name.trim().isEmpty()) {
+            title.setText(name.toUpperCase());
+        } else {
+            title.setText("ECHO");
+        }
+    }}

@@ -18,6 +18,7 @@ public class MusicManager {
     private static int currentTrack = -1;
     private static int previousTrack = -1;
     private static int previousPosition = 0; // Save playback position
+    private static int currentPosition = 0; // Current playback position when paused
 
     // Music track constants
     public static final int TRACK_BACKGROUND = R.raw.background_music;
@@ -93,9 +94,14 @@ public class MusicManager {
         if (currentTrack != -1 && !isQuestTrack(currentTrack)) {
             previousTrack = currentTrack;
             // Save current playback position
-            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-                previousPosition = mediaPlayer.getCurrentPosition();
-                Log.d(TAG, "Saved previous track: " + previousTrack + " at position: " + previousPosition);
+            if (mediaPlayer != null) {
+                try {
+                    previousPosition = mediaPlayer.getCurrentPosition();
+                    Log.d(TAG, "Saved previous track: " + previousTrack + " at position: " + previousPosition);
+                } catch (Exception e) {
+                    Log.e(TAG, "Error getting current position: " + e.getMessage());
+                    previousPosition = 0;
+                }
             }
         }
 
@@ -255,13 +261,14 @@ public class MusicManager {
     }
 
     /**
-     * Pause music
+     * Pause music and save position
      */
     public static synchronized void pauseMusic() {
         try {
             if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                currentPosition = mediaPlayer.getCurrentPosition();
                 mediaPlayer.pause();
-                Log.d(TAG, "Music paused");
+                Log.d(TAG, "Music paused at position: " + currentPosition);
             }
         } catch (Exception e) {
             Log.e(TAG, "Error pausing music: " + e.getMessage());
@@ -269,11 +276,16 @@ public class MusicManager {
     }
 
     /**
-     * Resume music
+     * Resume music from saved position
      */
     public static synchronized void resumeMusic() {
         try {
             if (mediaPlayer != null && !mediaPlayer.isPlaying() && isMusicEnabled) {
+                // Restore position if we have one saved
+                if (currentPosition > 0) {
+                    mediaPlayer.seekTo(currentPosition);
+                    Log.d(TAG, "Resuming music at position: " + currentPosition);
+                }
                 mediaPlayer.start();
                 Log.d(TAG, "Music resumed");
             }
@@ -302,14 +314,48 @@ public class MusicManager {
     }
 
     /**
-     * Stop fully (when app exits or goes to background)
+     * Stop fully (when app exits or goes to background) - PRESERVES TRACK INFO
      */
     public static synchronized void stopMusic() {
+        // Save current position before stopping
+        if (mediaPlayer != null) {
+            try {
+                currentPosition = mediaPlayer.getCurrentPosition();
+                Log.d(TAG, "Saving position before stop: " + currentPosition);
+            } catch (Exception e) {
+                currentPosition = 0;
+            }
+        }
+
+        stopMusicInternal();
+        // DON'T RESET currentTrack, previousTrack, previousPosition
+        // This allows resuming from where we left off
+        Log.d(TAG, "Music stopped (track info preserved)");
+    }
+
+    /**
+     * Fully reset music (only call when app is completely closed)
+     */
+    public static synchronized void resetMusic() {
         stopMusicInternal();
         currentTrack = -1;
         previousTrack = -1;
         previousPosition = 0;
-        Log.d(TAG, "Music stopped completely");
+        currentPosition = 0;
+        Log.d(TAG, "Music fully reset");
+    }
+
+    /**
+     * Resume current track from where it was (after app returns from background)
+     */
+    public static synchronized void resumeCurrentTrack(Context context) {
+        if (currentTrack != -1) {
+            Log.d(TAG, "Resuming current track: " + currentTrack + " at position: " + currentPosition);
+            startMusicAtPosition(context, currentTrack, currentPosition);
+        } else {
+            Log.d(TAG, "No current track, starting background music");
+            startMusic(context, TRACK_BACKGROUND);
+        }
     }
 
     /**

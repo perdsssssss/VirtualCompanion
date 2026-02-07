@@ -11,14 +11,23 @@ public class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        // IMPORTANT: Only start background music if NOT in a quest session
+        // IMPORTANT: Only resume music if NOT in a quest session
         // QuestSessionActivity will handle its own music
         if (!(this instanceof QuestSessionActivity)) {
-            MusicManager.startMusic(this);
+            // Just resume - don't start fresh
+            MusicManager.resumeMusic();
         }
 
         // Apply pet name to title
         applyPetNameToTitle();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Don't pause here - let MainApplication handle it globally
+        // This prevents double-pausing
     }
 
     private void applyPetNameToTitle() {
