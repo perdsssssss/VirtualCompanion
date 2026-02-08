@@ -139,7 +139,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "('Window Watch','Look outside for 90 seconds. Find 5 things moving and 5 things still. Just observe without thinking too much.',50,2,'neutral')," +
                         "('Face Release','Scrunch your whole face tight for 5 seconds. Release everything. Notice the difference. Repeat 3 times.',30,1,'neutral')," +
                         "('Sip and Pause','Get any drink you have. Take 7 small sips over 2 minutes. Pause between each sip. Focus on the taste and sensation.',50,2,'neutral')," +
-                        "('Listen to Music','Play one song you enjoy. Close your eyes. Try to hear each instrument. When your mind wanders, gently bring it back to the music.',50,3,'neutral')," +
+                        "('Listen to Music','Play one song you enjoy. Close your eyes. Try to hear each instrument. When your mind wanders, gently bring it back to the music.',50,2,'neutral')," +
                         "('Free Drawing','Get paper and a pen. Draw continuous lines for 2 minutes without lifting your pen. No pictures needed. Just move your hand freely.',50,2,'neutral')," +
                         "('Tension Check','Check your jaw, shoulders, hands, and stomach. Notice where you feel tension. Just observe it. Take a breath.',30,1,'neutral')," +
                         "('Body Shake','Shake your right hand for 10 seconds. Left hand for 10 seconds. Right foot. Left foot. Then shake your whole body for 10 seconds.',30,1,'neutral')," +
@@ -214,7 +214,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "('Physical Distance','Walk to another room or space. Moving your body away creates mental distance too.',30,1,'angry')," +
                         "('Opposite Image','Close your eyes. Picture a calm peaceful place in detail. Beach, forest, meadow. Opposite scenes help regulate.',50,2,'angry')," +
                         "('Anger Recording','Record yourself saying everything you are angry about. Say it all. Delete it after if you want.',50,2,'angry')," +
-                        "('Wall Push','Face a wall. Push against it hard for 15 seconds. Rest 10 seconds. Repeat 3 times. This releases tension.',30,1,'angry')," +
+                        "('Wall Push', 'Place your hands flat against a wall. Push firmly against it for 15 seconds. Rest 10 seconds. Repeat 3 times. This helps release built-up tension safely.', 30, 1, 'angry')," +
                         "('One Solution','Write this in your own words: One small thing I can control is... Then write one action you can actually take.',50,2,'angry')," +
                         "('Explosive Jumps','Do 20 jumps. Jump as hard and high as you can. Big movements help release anger from your body.',30,1,'angry')," +
 

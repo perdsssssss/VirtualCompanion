@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Track color when checked (ON) - Brown/Green -->
+    <item android:color="#7CB342" android:state_checked="true"/>
+    <!-- Track color when unchecked (OFF) - Light gray -->
+    <item android:color="#D0D0D0" android:state_checked="false"/>
+</selector>

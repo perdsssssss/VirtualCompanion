@@ -12,7 +12,7 @@
         android:id="@+id/backgroundImage"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@drawable/bg_main"
+        android:src="@drawable/bg_customizations"
         android:scaleType="centerCrop"
         android:contentDescription="Background"
         app:layout_constraintTop_toTopOf="parent"
@@ -123,91 +123,151 @@
         app:layout_constraintTop_toBottomOf="@id/appTitle">
 
         <!-- Category Button 1 - Tops -->
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/categoryButton1"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_marginBottom="12dp"
             android:background="@drawable/category_button_bg"
             android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:focusable="true">
 
             <ImageView
                 android:id="@+id/categoryIcon1"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:layout_gravity="center"
                 android:scaleType="centerCrop"
                 android:contentDescription="Tops"
                 android:src="@drawable/ic_category_empty" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/categoryText1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Top"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/nunito_bold"
+                android:shadowColor="#CC000000"
+                android:shadowDx="0"
+                android:shadowDy="1"
+                android:shadowRadius="3"
+                android:visibility="gone" />
+
+        </FrameLayout>
 
         <!-- Category Button 2 - Bottoms -->
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/categoryButton2"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_marginBottom="12dp"
             android:background="@drawable/category_button_bg"
             android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:focusable="true">
 
             <ImageView
                 android:id="@+id/categoryIcon2"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:layout_gravity="center"
                 android:scaleType="centerCrop"
                 android:contentDescription="Bottoms"
                 android:src="@drawable/ic_category_empty" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/categoryText2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Bottom"
+                android:textColor="#FFFFFF"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/nunito_bold"
+                android:shadowColor="#CC000000"
+                android:shadowDx="0"
+                android:shadowDy="1"
+                android:shadowRadius="3"
+                android:visibility="gone" />
+
+        </FrameLayout>
 
         <!-- Category Button 3 - Hats -->
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/categoryButton3"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_marginBottom="12dp"
             android:background="@drawable/category_button_bg"
             android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:focusable="true">
 
             <ImageView
                 android:id="@+id/categoryIcon3"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:layout_gravity="center"
                 android:scaleType="centerCrop"
                 android:contentDescription="Hats"
                 android:src="@drawable/ic_category_empty" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/categoryText3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Hat"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/nunito_bold"
+                android:shadowColor="#CC000000"
+                android:shadowDx="0"
+                android:shadowDy="1"
+                android:shadowRadius="3"
+                android:visibility="gone" />
+
+        </FrameLayout>
 
         <!-- Category Button 4 - Glasses -->
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/categoryButton4"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:background="@drawable/category_button_bg"
             android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:focusable="true">
 
             <ImageView
                 android:id="@+id/categoryIcon4"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:layout_gravity="center"
                 android:scaleType="centerCrop"
                 android:contentDescription="Glasses"
                 android:src="@drawable/ic_category_empty" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/categoryText4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Glasses"
+                android:textColor="#FFFFFF"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/nunito_bold"
+                android:shadowColor="#CC000000"
+                android:shadowDx="0"
+                android:shadowDy="1"
+                android:shadowRadius="3"
+                android:visibility="gone" />
+
+        </FrameLayout>
 
     </LinearLayout>
 

@@ -12,7 +12,7 @@
         android:id="@+id/backgroundImage"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@drawable/bg_settings"
+        android:src="@drawable/bg_quest"
         android:scaleType="centerCrop"
         android:contentDescription="Background"
         app:layout_constraintTop_toTopOf="parent"
@@ -61,7 +61,7 @@
         android:id="@+id/settingsScrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="1dp"
         android:layout_marginBottom="16dp"
         android:fillViewport="true"
         android:clipToPadding="false"
@@ -74,13 +74,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="24dp"
+            android:paddingHorizontal="20dp"
             android:paddingTop="16dp"
             android:paddingBottom="16dp">
 
             <!-- Settings Header -->
 
-            <!-- Sound Section -->
+            <!-- Sound Section Card -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -96,213 +96,302 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <LinearLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/settings_card_bg"
-                android:padding="20dp"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="6dp"
+                app:cardBackgroundColor="#FCE0C3">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:fontFamily="@font/nunito_bold"
-                    android:gravity="center"
-                    android:text="Sound"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <!-- Sound Effects Toggle -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                    <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:src="@drawable/ic_sound"
-                        android:contentDescription="Sound"
-                        app:tint="#FFFFFF" />
-
-                    <TextView
-                        android:layout_width="0dp"
+                    <!-- Header Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="12dp"
-                        android:text="Sound effects"
-                        android:textSize="16sp"
-                        android:textColor="#FFFFFF"
-                        android:fontFamily="@font/nunito_bold" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="12dp">
 
-                    <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/soundEffectsToggle"
-                        android:layout_width="wrap_content"
+                        <!-- Icon -->
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginEnd="12dp"
+                            app:cardCornerRadius="24dp"
+                            app:cardElevation="3dp"
+                            app:cardBackgroundColor="#8B6F47">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:padding="10dp"
+                                android:src="@drawable/ic_sound"
+                                android:contentDescription="Sound Icon"
+                                app:tint="#FFFFFF" />
+                        </androidx.cardview.widget.CardView>
+
+                        <!-- Title -->
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Sound"
+                            android:textColor="#3E2723"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/nunito_bold" />
+                    </LinearLayout>
+
+                    <!-- Sound Effects Toggle -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:checked="true"
-                        app:thumbTint="#FFFFFF"
-                        app:trackTint="#F6DBD2" />
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="0dp"
+                        app:cardBackgroundColor="#E5D4C1">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:padding="12dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Sound effects"
+                                android:textSize="14sp"
+                                android:textColor="#3E2723"
+                                android:fontFamily="@font/nunito_bold" />
+
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:id="@+id/soundEffectsToggle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                app:thumbTint="@color/switch_thumb_color"
+                                app:trackTint="@color/switch_track_color" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
                 </LinearLayout>
-            </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-            <!-- Rename & Change Gender Section -->
-            <LinearLayout
+            <!-- Rename & Change Gender Card -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/settings_card_bg"
-                android:padding="20dp"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="6dp"
+                app:cardBackgroundColor="#FCE0C3">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:fontFamily="@font/nunito_bold"
-                    android:gravity="center"
-                    android:text="Rename &amp; Change Gender"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <!-- Name Input with Edit Icon -->
                 <LinearLayout
-                    android:id="@+id/nameInputContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:layout_marginBottom="20dp"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                    <EditText
-                        android:id="@+id/petNameInput"
-                        android:layout_width="0dp"
+                    <!-- Header Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="Name your companion"
-                        android:textSize="18sp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="12dp">
+
+                        <!-- Icon -->
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginEnd="12dp"
+                            app:cardCornerRadius="24dp"
+                            app:cardElevation="3dp"
+                            app:cardBackgroundColor="#8B6F47">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:padding="10dp"
+                                android:src="@drawable/ic_customize"
+                                android:contentDescription="Customize Icon"
+                                app:tint="#FFFFFF" />
+                        </androidx.cardview.widget.CardView>
+
+                        <!-- Title -->
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Rename &amp; Change Gender"
+                            android:textColor="#3E2723"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/nunito_bold"
+                            android:maxLines="2"
+                            android:ellipsize="end" />
+                    </LinearLayout>
+
+                    <!-- Name Input Card -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="0dp"
+                        app:cardBackgroundColor="#E5D4C1">
+
+                        <LinearLayout
+                            android:id="@+id/nameInputContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:padding="12dp"
+                            android:clickable="true"
+                            android:focusable="true">
+
+                            <EditText
+                                android:id="@+id/petNameInput"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:hint="Name your companion"
+                                android:textSize="16sp"
+                                android:textColor="#3E2723"
+                                android:textColorHint="#6D4C41"
+                                android:background="@null"
+                                android:gravity="center"
+                                android:textStyle="bold"
+                                android:fontFamily="@font/nunito_bold"
+                                android:inputType="textPersonName"
+                                android:maxLength="15"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:cursorVisible="false"
+                                android:clickable="true" />
+
+                            <ImageView
+                                android:id="@+id/editNameIcon"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginStart="8dp"
+                                android:contentDescription="Edit name"
+                                android:src="@drawable/ic_edit"
+                                android:clickable="true"
+                                android:focusable="true"
+                                app:tint="#3E2723" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                    <!-- Gender Selection Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+
+                        <!-- Male Button -->
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="6dp"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="2dp"
+                            app:cardBackgroundColor="#E5D4C1">
+
+                            <LinearLayout
+                                android:id="@+id/boyButton"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <ImageView
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:contentDescription="Male"
+                                    android:src="@drawable/ic_boy"
+                                    app:tint="#87CEEB" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="6dp"
+                                    android:fontFamily="@font/nunito_bold"
+                                    android:text="Male"
+                                    android:textColor="#3E2723"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <!-- Female Button -->
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="6dp"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="2dp"
+                            app:cardBackgroundColor="#E5D4C1">
+
+                            <LinearLayout
+                                android:id="@+id/girlButton"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <ImageView
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:contentDescription="Female"
+                                    android:src="@drawable/ic_girl"
+                                    app:tint="#FFB6C1" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="6dp"
+                                    android:fontFamily="@font/nunito_bold"
+                                    android:text="Female"
+                                    android:textColor="#3E2723"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+
+                    <!-- Save Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/saveButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:minHeight="48dp"
+                        android:text="Save"
                         android:textColor="#FFFFFF"
-                        android:textColorHint="#CCFFFFFF"
-                        android:background="@null"
-                        android:gravity="center"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         android:fontFamily="@font/nunito_bold"
-                        android:inputType="textPersonName"
-                        android:maxLength="15"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:cursorVisible="false"
-                        android:clickable="true" />
-
-                    <ImageView
-                        android:id="@+id/editNameIcon"
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:layout_marginStart="10dp"
-                        android:contentDescription="Edit name"
-                        android:src="@drawable/ic_edit"
-                        android:clickable="true"
-                        android:focusable="true"
-                        app:tint="#FFFFFF" />
+                        app:cornerRadius="24dp"
+                        android:backgroundTint="#7CB342" />
                 </LinearLayout>
-
-                <!-- Gender Selection -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
-
-                    <!-- Male Button -->
-                    <LinearLayout
-                        android:id="@+id/boyButton"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/gender_selector_bg"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <ImageView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:contentDescription="Male"
-                            android:src="@drawable/ic_boy"
-                            app:tint="#87CEEB" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:fontFamily="@font/nunito_bold"
-                            android:text="Male"
-                            android:textColor="#FFFFFF"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <!-- Female Button -->
-                    <LinearLayout
-                        android:id="@+id/girlButton"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="8dp"
-                        android:background="@drawable/gender_selector_bg"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <ImageView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:contentDescription="Female"
-                            android:src="@drawable/ic_girl"
-                            app:tint="#FFB6C1" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:fontFamily="@font/nunito_bold"
-                            android:text="Female"
-                            android:textColor="#FFFFFF"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-
-            <!-- Save Button -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/saveButton"
-                android:layout_width="150dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:text="Save"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textAllCaps="false"
-                android:fontFamily="@font/nunito_bold"
-                app:backgroundTint="@null"
-                android:background="@drawable/glass_button_selector"
-                app:cornerRadius="25dp"
-                app:strokeColor="#EEFFFFFF"
-                app:strokeWidth="2dp"
-                android:layout_marginTop="8dp" />
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
     </ScrollView>
 
@@ -359,7 +448,7 @@
         android:id="@+id/appTitle"
         android:layout_width="409dp"
         android:layout_height="207dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="3dp"
         android:adjustViewBounds="true"
         android:contentDescription="ECHO Logo"
         android:elevation="20dp"
